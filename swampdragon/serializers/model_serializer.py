@@ -96,6 +96,11 @@ class ModelSerializer(Serializer):
         return self.instance
         
     def save(self):
+        self.validate()
+        self.instance.save()
+        return self.instance
+        
+    def validate(self):
         self.deserialize()
         if self.errors:
             raise ModelValidationError(self.errors)
@@ -103,8 +108,7 @@ class ModelSerializer(Serializer):
             self.instance.clean_fields()
         except ValidationError as e:
             raise ModelValidationError(e.message_dict)
-        self.instance.save()
-
+        
         # Serialize related fields
         for key, val in self.data.items():
             if key not in self.related_fields:
