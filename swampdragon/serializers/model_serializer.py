@@ -94,13 +94,8 @@ class ModelSerializer(Serializer):
             raise ModelValidationError(errors=self.errors)
 
         return self.instance
-
-    def save(self):
-        self.validate()
-        self.instance.save()
-        return self.instance
         
-    def validate(self):
+    def save(self):
         self.deserialize()
         if self.errors:
             raise ModelValidationError(self.errors)
